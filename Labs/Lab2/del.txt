@@ -1,0 +1,13 @@
+"this" is a keyword in java, which normally refers to the object on which a method is invoked. In a constructor, it can be used to invoke a constructor from within another constructor.
+
+In your own programs, if you find yourself copying multiple lines of code for reuse, it is usually wise to put the common code into a new shared method.
+
+Any object can have a toString method, and if it does, that method will be automatically called when you concatenate the object to a String. (Actually, _every_object has a toString method, but the default toString isn't particularly enlightening.)
+
+The pseudocode for a recursive GCD function. a and b must be nonnegative.
+
+	function gcd(a,b)
+		if b = 0
+			return a
+		else
+			return gcd(b, a mod b)
