@@ -1,0 +1,7 @@
+"javac" is the name of the Java Compiler.
+
+Once javac is able to compile the code, it will create a file called Names.class in the same directory. You can run this program using the Java Interpreter. 
+
+Java automatically appends the ".class" file extension on Name.class. If you accidentally type "java Names.class", java will look for a file called "Names.class.class".
+
+You may think that the file produced by javac is named Names.class because the input file is named Names.java. Not so--the name of the .class file is based on the class name IN Names.java.
