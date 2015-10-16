@@ -2,6 +2,7 @@
 
 import java.net.*;
 import java.io.*;
+import java.util.Stack;
 
 /**  A class that provides a main function to read five lines of a commercial
  *   Web page and print them in reverse order, given the name of a company.
@@ -28,6 +29,23 @@ class OpenCommercial {
     inputLine = keyboard.readLine();
 
     /* Replace this comment with your solution.  */
+    String site = "http://www." + inputLine + ".com";
+    // System.out.println(url);
+    URL url = new URL(site);
 
+    BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+    String input;
+    Stack st = new Stack();
+    int index = 0;
+    while ((input = in.readLine())!=null && index <= 4)
+      {
+        st.push(input);
+        index++; 
+      }
+    while (!st.isEmpty())
+    {
+      System.out.println(st.pop());
+    }
+    in.close();
   }
 }
