@@ -1,0 +1,1 @@
+All the methods in the Date class can read all the private fields in _any_ Date object (not just "this" Date object).
