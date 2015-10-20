@@ -12,6 +12,7 @@ public class SList {
 
   private SListNode head;
   private int size;
+  private SListNode tail;
 
   /**
    *  SList() constructs an empty list.
@@ -20,6 +21,7 @@ public class SList {
   public SList() {
     size = 0;
     head = null;
+    tail = null;
   }
 
   /**
@@ -46,7 +48,13 @@ public class SList {
    **/
 
   public void insertFront(Object obj) {
-    head = new SListNode(obj, head);
+    if (head == null) {
+      head = new SListNode(obj);
+      tail = head;
+    }
+    else {
+      head = new SListNode(obj, head);  
+    }
     size++;
   }
 
@@ -55,15 +63,28 @@ public class SList {
    *  @param obj the item to be inserted.
    **/
 
+  // public void insertEnd(Object obj) {
+  //   if (head == null) {
+  //     head = new SListNode(obj);
+  //   } else {
+  //     SListNode node = head;
+  //     while (node.next != null) {
+  //       node = node.next;
+  //     }
+  //     node.next = new SListNode(obj);
+  //   }
+  //   size++;
+  // }
+
   public void insertEnd(Object obj) {
     if (head == null) {
       head = new SListNode(obj);
-    } else {
-      SListNode node = head;
-      while (node.next != null) {
-        node = node.next;
-      }
-      node.next = new SListNode(obj);
+      tail = head;
+    }
+    else {
+      SListNode l = new SListNode(obj);
+      tail.next = l;
+      tail = l;
     }
     size++;
   }
@@ -128,6 +149,7 @@ public class SList {
     testEmpty();
     testAfterInsertFront();
     testAfterInsertEnd();
+    testAfterInsertBothFrontAndEnd();
   }
 
     
@@ -224,5 +246,33 @@ public class SList {
 		       + lst1.toString());
     TestHelper.verify(lst1.toString().equals("[  5  6  7  ]"),
 		      "insertFront after insertEnd failed");
+  }
+
+  private static void testAfterInsertBothFrontAndEnd() {
+    SList lst1 = new SList();
+    lst1.insertEnd(new Integer(6));
+    lst1.insertEnd(new Integer(9));
+    lst1.insertEnd(new Integer(12));
+    System.out.println();
+    System.out.println("Here is a list after insertEnd 6, 9, 12: "
+           + lst1.toString());
+    System.out.println("isEmpty() should be false. It is: " +
+           lst1.isEmpty());
+    TestHelper.verify(lst1.isEmpty() == false,
+          "isEmpty() after insertEnd failed");    
+    System.out.println("length() should be 3. It is: " +
+           lst1.length());
+    TestHelper.verify(lst1.length() == 3, 
+          "length() after insertEndfailed");
+    lst1.insertFront(new Integer(3));
+    System.out.println("Here is the same list after insertFront(3): "
+           + lst1.toString());
+    TestHelper.verify(lst1.toString().equals("[  3  6  9  12  ]"),
+          "insertFront after insertEnd failed");
+    lst1.insertEnd(new Integer(15));
+    System.out.println("Here is the same list after insertEnd(15): "
+           + lst1.toString());
+    TestHelper.verify(lst1.toString().equals("[  3  6  9  12  15  ]"),
+          "insertFront after insertEnd failed");
   }
 }
