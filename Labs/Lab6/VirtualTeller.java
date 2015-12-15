@@ -37,14 +37,21 @@ public class VirtualTeller {
    *  @param amount an amount of money.
    */
   public void withdraw(int acct, int amount) {
-    AccountData account = findAccount(acct);
-
-    if (account == null) {   // Didn't find the account.
-      System.out.println("Error:  Couldn't find account number `" +
-                         acct + "'" );
-    } else {
-      account.withdraw(amount);
+    AccountData account = null;
+    try {
+      account = findAccount(acct);
+      account.withdraw(amount);  
+    } catch (NullPointerException | BadAccountException e) {
+      System.err.println(e);
     }
+    
+
+    // if (account == null) {   // Didn't find the account.
+      // System.out.println("Error:  Couldn't find account number `" +
+                         // acct + "'" );
+    // } else {
+      
+    // }
   }
 
   /**
@@ -55,14 +62,21 @@ public class VirtualTeller {
    *  @param amount an amount of money.
    */
   public void deposit(int acct, int amount) {
-    AccountData account = findAccount(acct);
+    AccountData account = null;
+    try {
+      account = findAccount(acct);
+      account.deposit(amount);  
+    } catch (NullPointerException | BadAccountException e) {
+      System.err.println(e);
+    } 
 
-    if (account == null) { 
-      System.out.println("Error:  Couldn't find account number `" +
-                         acct + "'");
-    } else {
-      account.deposit(amount);
-    }
+    // if (account == null) { 
+      // System.out.println("Error:  Couldn't find account number `" +
+                         // acct + "'");
+    // } 
+      // else {
+      
+    // }
   }
 
   /**
@@ -72,15 +86,22 @@ public class VirtualTeller {
    *  @return the balance, or -1 if the account number is invalid.
    */
   public int balanceInquiry(int acct) {
-    AccountData account = findAccount(acct);
-
-    if (account == null) {
-      System.out.println("Error:  Couldn't find account number `" +
-                         acct + "'" );
-      return -1;
-    } else {
-      return account.getBalance();
+    AccountData account = null;
+    try {
+      account = findAccount(acct);
+      return account.getBalance();  
+    } catch (NullPointerException | BadAccountException e) {
+      // System.err.println(e);
     }
+
+    // if (account == null) {
+      // System.out.println("Error:  Couldn't find account number `" +
+                         // acct + "'" );
+      // return -1;
+    // } else {
+      
+    // }
+    return -1;
   }
 
   /**
@@ -89,7 +110,7 @@ public class VirtualTeller {
    *  @param acct is an account number.
    *  @return the AccountData object associated with the account number.
    */
-  private AccountData findAccount(int acct) {
+  private AccountData findAccount(int acct) throws BadAccountException {
     AccountData account = (AccountData) accounts.find(acct);
     return account;
   }
