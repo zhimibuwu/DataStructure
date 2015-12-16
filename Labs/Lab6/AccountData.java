@@ -53,11 +53,17 @@ public class AccountData implements Keyable {
   /** 
    *  withdraw() reduces the balance by the withdrawal amount "amt".
    **/
-  public void withdraw(int amt) {
-    if (amt <= balance) {
+  public void withdraw(int amt) throws BadTransactionException {
+    if (amt < 0) 
+    {
+      throw new BadTransactionException(amt);
+    }
+    else {
+      if (amt <= balance) {
       balance = balance - amt;
     } else {
       System.out.println("Error:  Insufficient funds: " + amt);
+    }
     }
   }
 

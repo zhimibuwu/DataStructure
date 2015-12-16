@@ -36,14 +36,14 @@ public class VirtualTeller {
    *  @param acct is an account number.
    *  @param amount an amount of money.
    */
-  public void withdraw(int acct, int amount) {
+  public void withdraw(int acct, int amount) throws BadAccountException, BadTransactionException {
     AccountData account = null;
-    try {
+    // try {
       account = findAccount(acct);
       account.withdraw(amount);  
-    } catch (NullPointerException | BadAccountException e) {
-      System.err.println(e);
-    }
+    // } catch (NullPointerException | BadAccountException e) {
+      // System.err.println(e);
+    // }
     
 
     // if (account == null) {   // Didn't find the account.
@@ -61,14 +61,14 @@ public class VirtualTeller {
    *  @param acct is an account number.
    *  @param amount an amount of money.
    */
-  public void deposit(int acct, int amount) {
+  public void deposit(int acct, int amount) throws BadAccountException {
     AccountData account = null;
-    try {
+    // try {
       account = findAccount(acct);
       account.deposit(amount);  
-    } catch (NullPointerException | BadAccountException e) {
-      System.err.println(e);
-    } 
+    // } catch (NullPointerException | BadAccountException e) {
+      // System.err.println(e);
+    // } 
 
     // if (account == null) { 
       // System.out.println("Error:  Couldn't find account number `" +
@@ -112,6 +112,9 @@ public class VirtualTeller {
    */
   private AccountData findAccount(int acct) throws BadAccountException {
     AccountData account = (AccountData) accounts.find(acct);
+    if (account == null) {
+      throw new BadAccountException(acct);
+    }
     return account;
   }
 }

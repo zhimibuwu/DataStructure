@@ -38,7 +38,7 @@ public class BankApp {
 	} else if (command.equals("withdraw")) {
     try {
       bankApp.doWithdraw();  
-    } catch (BadAccountException e) {
+    } catch (BadAccountException | BadTransactionException e) {
       System.err.println(e);
     }
 	  
@@ -102,7 +102,7 @@ public class BankApp {
    *  to perform a withdrawal transaction from that account.
    *  @exception IOException if there are problems reading user input.
    */
-  private void doWithdraw() throws IOException, BadAccountException {
+  private void doWithdraw() throws IOException, BadAccountException, BadTransactionException {
     // Get account number.
     int acctNumber = readInt("Enter account number: ");
     int amount = readInt("Enter amount to withdraw: ");
