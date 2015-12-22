@@ -21,9 +21,14 @@ public class PixImage {
    *  Define any variables associated with a PixImage object here.  These
    *  variables MUST be private.
    */
+  private int width;
+  private int height;
+  private short[][] redValue;
+  private short[][] greenValue;
+  private short[][] blueValue;
 
-
-
+  private static PixImage temp;
+  private static PixImage tempPrevious;
 
   /**
    * PixImage() constructs an empty PixImage with a specified width and height.
@@ -34,6 +39,18 @@ public class PixImage {
    */
   public PixImage(int width, int height) {
     // Your solution here.
+    this.width = width;
+    this.height = height;
+    this.redValue = new short[width][height];
+    this.greenValue = new short[width][height];
+    this.blueValue = new short[width][height];
+    for (int i = 0; i < width; i++) {
+        for (int j = 0; j < height; j++) {
+          redValue[i][j] = 0;
+          greenValue[i][j] = 0;
+          blueValue[i][j] = 0; 
+      }
+    }
   }
 
   /**
@@ -43,7 +60,7 @@ public class PixImage {
    */
   public int getWidth() {
     // Replace the following line with your solution.
-    return 1;
+    return this.width;
   }
 
   /**
@@ -53,7 +70,7 @@ public class PixImage {
    */
   public int getHeight() {
     // Replace the following line with your solution.
-    return 1;
+    return this.height;
   }
 
   /**
@@ -65,7 +82,7 @@ public class PixImage {
    */
   public short getRed(int x, int y) {
     // Replace the following line with your solution.
-    return 0;
+    return this.redValue[x][y];
   }
 
   /**
@@ -77,7 +94,7 @@ public class PixImage {
    */
   public short getGreen(int x, int y) {
     // Replace the following line with your solution.
-    return 0;
+    return this.greenValue[x][y];
   }
 
   /**
@@ -89,7 +106,7 @@ public class PixImage {
    */
   public short getBlue(int x, int y) {
     // Replace the following line with your solution.
-    return 0;
+    return this.blueValue[x][y];
   }
 
   /**
@@ -107,6 +124,9 @@ public class PixImage {
    */
   public void setPixel(int x, int y, short red, short green, short blue) {
     // Your solution here.
+    this.redValue[x][y] = red;
+    this.greenValue[x][y] = green;
+    this.blueValue[x][y] = blue;
   }
 
   /**
@@ -120,7 +140,176 @@ public class PixImage {
    */
   public String toString() {
     // Replace the following line with your solution.
-    return "";
+    String red = new String();
+    String green = new String();
+    String blue = new String();
+    for (int i = 0; i < width; i++) {
+        for (int j = 0; j < height; j++) {
+          red += redValue[i][j] + " ";
+          green += greenValue[i][j] + " ";
+          blue += blueValue[i][j] + " "; 
+      }
+    }
+
+    return red + green + blue;
+  }
+
+  private PixImage copyImage () {
+    PixImage newImage = new PixImage(this.width, this.height);
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < height; j++) {
+        newImage.setPixel(i,j,this.getRed(i,j),this.getGreen(i,j),this.getBlue(i,j));
+      }
+    }
+    return newImage;
+  }
+
+  private boolean isLegal(int x, int y) {
+    if (x >= 0 && x <= width - 1 && y >= 0 && y <= height - 1)
+      return true;
+    else
+      return false; 
+
+  }
+
+  private short getRedAverage(int x, int y) {
+    int count = 0;
+    int sum = 0;
+    if (isLegal(x-1,y-1)) {
+      count += 1;
+      sum += getRed(x-1,y-1);
+    }
+    if (isLegal(x,y-1)) {
+      count += 1;
+      sum += getRed(x,y-1);
+    }
+    if (isLegal(x+1,y-1)) {
+      count += 1;
+      sum += getRed(x+1,y-1);
+    }
+    if (isLegal(x-1,y)) {
+      count += 1;
+      sum += getRed(x-1,y);
+    }
+    if (isLegal(x,y)) {
+      count += 1;
+      sum += getRed(x,y);
+    }
+    if (isLegal(x+1,y)) {
+      count += 1;
+      sum += getRed(x+1,y);
+    }
+    if (isLegal(x-1,y+1)) {
+      count += 1;
+      sum += getRed(x-1,y+1);
+    }
+    if (isLegal(x,y+1)) {
+      count += 1;
+      sum += getRed(x,y+1);
+    }
+    if (isLegal(x+1,y+1)) {
+      count += 1;
+      sum += getRed(x+1,y+1);
+    }
+    // System.out.println("x: "+ x+ " y: "+ y + " sum: "+ sum + " count: " + count);
+    float avg = sum/count;
+    return (short)Math.round(avg);
+  }
+
+  private short getGreenAverage(int x, int y) {
+    int count = 0;
+    int sum = 0;
+    if (isLegal(x-1,y-1)) {
+      count += 1;
+      sum += getGreen(x-1,y-1);
+    }
+    if (isLegal(x,y-1)) {
+      count += 1;
+      sum += getGreen(x,y-1);
+    }
+    if (isLegal(x+1,y-1)) {
+      count += 1;
+      sum += getGreen(x+1,y-1);
+    }
+    if (isLegal(x-1,y)) {
+      count += 1;
+      sum += getGreen(x-1,y);
+    }
+    if (isLegal(x,y)) {
+      count += 1;
+      sum += getGreen(x,y);
+    }
+    if (isLegal(x+1,y)) {
+      count += 1;
+      sum += getGreen(x+1,y);
+    }
+    if (isLegal(x-1,y+1)) {
+      count += 1;
+      sum += getGreen(x-1,y+1);
+    }
+    if (isLegal(x,y+1)) {
+      count += 1;
+      sum += getGreen(x,y+1);
+    }
+    if (isLegal(x+1,y+1)) {
+      count += 1;
+      sum += getGreen(x+1,y+1);
+    }
+    float avg = sum/count;
+    return (short)Math.round(avg);
+  }
+
+  private short getBlueAverage(int x, int y) {
+    int count = 0;
+    int sum = 0;
+    if (isLegal(x-1,y-1)) {
+      count += 1;
+      sum += getBlue(x-1,y-1);
+    }
+    if (isLegal(x,y-1)) {
+      count += 1;
+      sum += getBlue(x,y-1);
+    }
+    if (isLegal(x+1,y-1)) {
+      count += 1;
+      sum += getBlue(x+1,y-1);
+    }
+    if (isLegal(x-1,y)) {
+      count += 1;
+      sum += getBlue(x-1,y);
+    }
+    if (isLegal(x,y)) {
+      count += 1;
+      sum += getBlue(x,y);
+    }
+    if (isLegal(x+1,y)) {
+      count += 1;
+      sum += getBlue(x+1,y);
+    }
+    if (isLegal(x-1,y+1)) {
+      count += 1;
+      sum += getBlue(x-1,y+1);
+    }
+    if (isLegal(x,y+1)) {
+      count += 1;
+      sum += getBlue(x,y+1);
+    }
+    if (isLegal(x+1,y+1)) {
+      count += 1;
+      sum += getBlue(x+1,y+1);
+    }
+    float avg = sum/count;
+    return (short)Math.round(avg);
+  }
+
+  private PixImage afterAvg() {
+    PixImage previous = new PixImage(width, height);
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < height; j++) {
+        previous.setPixel(i,j,this.getRedAverage(i,j),this.getGreenAverage(i,j),this.getBlueAverage(i,j));
+      }
+    }
+    return previous;
   }
 
   /**
@@ -154,7 +343,21 @@ public class PixImage {
    */
   public PixImage boxBlur(int numIterations) {
     // Replace the following line with your solution.
-    return this;
+    temp = new PixImage(width, height);
+    tempPrevious = new PixImage(width, height);
+    if (numIterations <= 0) {
+      return this;
+    } else if (numIterations == 1) {
+      tempPrevious = this.afterAvg();
+      return tempPrevious;
+    } else {
+      tempPrevious = this.afterAvg();
+      for (int k = 0; k < numIterations - 1; k++){
+        temp = tempPrevious.afterAvg();
+        tempPrevious = temp.copyImage();
+      }
+      return temp;
+    }
   }
 
   /**
