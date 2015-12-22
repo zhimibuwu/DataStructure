@@ -402,11 +402,87 @@ public class PixImage {
    */
   public PixImage sobelEdges() {
     // Replace the following line with your solution.
-    return this;
+    PixImage pic = new PixImage(width, height);
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < height; j++) {
+        pic.setPixel(i,j,mag2gray(calcEnergy(i,j)),mag2gray(calcEnergy(i,j)),mag2gray(calcEnergy(i,j)));
+      }
+    }
+    return pic;
     // Don't forget to use the method mag2gray() above to convert energies to
     // pixel intensities.
   }
 
+  private int transx(int x) {
+    int tx = 0;
+    if (x == -1) 
+      tx = 0;
+    else if (x == width) 
+      tx = width - 1;
+    else
+      tx = x;
+    return tx;
+  }
+
+  private int transy(int y) {
+    int ty = 0;
+    if (y == -1) 
+      ty = 0;
+    else if (y == height) 
+      ty = height - 1;
+    else
+      ty = y;
+    return ty;
+  }
+
+  private int calcredgx(int x, int y) {
+    int gx = 1 * getRed(transx(x-1),transy(y-1)) + 0 * getRed(transx(x),transy(y-1)) + (-1) * getRed(transx(x+1), transy(y-1));
+    gx += 2 * getRed(transx(x-1),transy(y)) + 0 * getRed(transx(x),transy(y)) + (-2) * getRed(transx(x+1), transy(y));
+    gx += 1 * getRed(transx(x-1),transy(y+1)) + 0 * getRed(transx(x),transy(y+1)) + (-1) * getRed(transx(x+1), transy(y+1));
+    return gx;
+  }
+
+  private int calcredgy(int x, int y) {
+    int gy = 1 * getRed(transx(x-1),transy(y-1)) + 2 * getRed(transx(x),transy(y-1)) + (1) * getRed(transx(x+1), transy(y-1));
+    gy += 0 * getRed(transx(x-1),transy(y)) + 0 * getRed(transx(x),transy(y)) + (0) * getRed(transx(x+1), transy(y));
+    gy += (-1) * getRed(transx(x-1),transy(y+1)) + (-2) * getRed(transx(x),transy(y+1)) + (-1) * getRed(transx(x+1), transy(y+1));
+    return gy;
+  }
+
+  private int calcgreengx(int x, int y) {
+    int gx = 1 * getGreen(transx(x-1),transy(y-1)) + 0 * getGreen(transx(x),transy(y-1)) + (-1) * getGreen(transx(x+1), transy(y-1));
+    gx += 2 * getGreen(transx(x-1),transy(y)) + 0 * getGreen(transx(x),transy(y)) + (-2) * getGreen(transx(x+1), transy(y));
+    gx += 1 * getGreen(transx(x-1),transy(y+1)) + 0 * getGreen(transx(x),transy(y+1)) + (-1) * getGreen(transx(x+1), transy(y+1));
+    return gx;
+  }
+
+  private int calcgreengy(int x, int y) {
+    int gy = 1 * getGreen(transx(x-1),transy(y-1)) + 2 * getGreen(transx(x),transy(y-1)) + (1) * getGreen(transx(x+1), transy(y-1));
+    gy += 0 * getGreen(transx(x-1),transy(y)) + 0 * getGreen(transx(x),transy(y)) + (0) * getGreen(transx(x+1), transy(y));
+    gy += (-1) * getGreen(transx(x-1),transy(y+1)) + (-2) * getGreen(transx(x),transy(y+1)) + (-1) * getGreen(transx(x+1), transy(y+1));
+    return gy;
+  }
+
+  private int calcbluegx(int x, int y) {
+    int gx = 1 * getBlue(transx(x-1),transy(y-1)) + 0 * getBlue(transx(x),transy(y-1)) + (-1) * getBlue(transx(x+1), transy(y-1));
+    gx += 2 * getBlue(transx(x-1),transy(y)) + 0 * getBlue(transx(x),transy(y)) + (-2) * getBlue(transx(x+1), transy(y));
+    gx += 1 * getBlue(transx(x-1),transy(y+1)) + 0 * getBlue(transx(x),transy(y+1)) + (-1) * getBlue(transx(x+1), transy(y+1));
+    return gx;
+  }
+
+  private int calcbluegy(int x, int y) {
+    int gy = 1 * getBlue(transx(x-1),transy(y-1)) + 2 * getBlue(transx(x),transy(y-1)) + (1) * getBlue(transx(x+1), transy(y-1));
+    gy += 0 * getBlue(transx(x-1),transy(y)) + 0 * getBlue(transx(x),transy(y)) + (0) * getBlue(transx(x+1), transy(y));
+    gy += (-1) * getBlue(transx(x-1),transy(y+1)) + (-2) * getBlue(transx(x),transy(y+1)) + (-1) * getBlue(transx(x+1), transy(y+1));
+    return gy;
+  }
+
+  private int calcEnergy(int x, int y) {
+    int inter = calcredgx(x,y) * calcredgx(x,y) + calcredgy(x,y) * calcredgy(x,y);
+    inter += calcgreengx(x,y) * calcgreengx(x,y) + calcgreengy(x,y) * calcgreengy(x,y);
+    inter += calcbluegx(x,y) * calcbluegx(x,y) + calcbluegy(x,y) * calcbluegy(x,y);
+    return inter;
+  }
 
   /**
    * TEST CODE:  YOU DO NOT NEED TO FILL IN ANY METHODS BELOW THIS POINT.
